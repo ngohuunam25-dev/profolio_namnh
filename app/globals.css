@@ -1,0 +1,158 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens. Every component reads colour and type from these roles.
+ * Ground, ink and one accent; surfaces are tone steps of the brand tint.
+ */
+:root {
+	--bg: #fafafa;
+	--ink: #0f172a;
+	--muted: #475569;
+	--accent: #183e9f;
+	--on-accent: #fafafa;
+	--tint: #96bcee;
+	--surface: color-mix(in srgb, #96bcee 16%, #fafafa);
+	--surface-2: color-mix(in srgb, #96bcee 30%, #fafafa);
+	--inverse-bg: #0f172a;
+	--inverse-ink: #fafafa;
+	--inverse-muted: #b6c3d6;
+	--brand-gradient: linear-gradient(
+		121deg,
+		#021b7b 0%,
+		#1670de 29%,
+		#193493 100%
+	);
+	--margin: clamp(20px, 2.2vw, 32px);
+	--ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: #0b1120;
+		--ink: #f1f5f9;
+		--muted: #a3b1c6;
+		--accent: #96bcee;
+		--on-accent: #0f172a;
+		--surface: color-mix(in srgb, #96bcee 9%, #0b1120);
+		--surface-2: color-mix(in srgb, #96bcee 16%, #0b1120);
+		--inverse-bg: #020617;
+	}
+}
+
+@theme inline {
+	--color-bg: var(--bg);
+	--color-ink: var(--ink);
+	--color-muted: var(--muted);
+	--color-accent: var(--accent);
+	--color-on-accent: var(--on-accent);
+	--color-tint: var(--tint);
+	--color-surface: var(--surface);
+	--color-surface-2: var(--surface-2);
+	--color-inverse: var(--inverse-bg);
+	--color-inverse-ink: var(--inverse-ink);
+	--color-inverse-muted: var(--inverse-muted);
+
+	--font-display: var(--font-franklin), ui-sans-serif, sans-serif;
+	--font-serif: var(--font-serif4), ui-serif, Georgia, serif;
+	--font-code: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+	/* The five type steps of the page. Nothing else sets a size. */
+	--text-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+	--text-small--line-height: 1.5;
+	--text-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+	--text-body--line-height: 1.55;
+	--text-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+	--text-lead--line-height: 1.3;
+	--text-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+	--text-head--line-height: 0.98;
+	--text-monument: clamp(3.5rem, 11vw, 11rem);
+	--text-monument--line-height: 0.85;
+}
+
+html {
+	background: var(--bg);
+	color: var(--ink);
+	scroll-behavior: smooth;
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	font-family: var(--font-serif);
+	font-size: var(--text-body);
+	line-height: 1.55;
+	font-kerning: normal;
+	text-rendering: optimizeLegibility;
+}
+
+::selection {
+	background: var(--tint);
+	color: #0f172a;
+}
+
+:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 3px;
+}
+
+code,
+pre {
+	font-family: var(--font-code);
+}
+
+/* The brand gradient lives on the mark only (declared brand exception). */
+.brand-mark {
+	background: var(--brand-gradient);
+}
+
+/*
+ * Entrances. Content is hidden only when script is running, so a page
+ * without JavaScript still shows everything.
+ */
+.js [data-reveal] {
+	opacity: 0;
+	transform: translateY(24px);
+	transition:
+		opacity 700ms var(--ease-out),
+		transform 700ms var(--ease-out);
+	transition-delay: calc(var(--i, 0) * 75ms);
+}
+
+.js [data-reveal].is-in {
+	opacity: 1;
+	transform: none;
+}
+
+@keyframes hero-drift {
+	from {
+		transform: scale(1.04) translateY(0);
+	}
+
+	to {
+		transform: scale(1.12) translateY(-2%);
+	}
+}
+
+.hero-drift {
+	animation: hero-drift 24s var(--ease-out) infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
+	.js [data-reveal] {
+		transform: none;
+		transition: opacity 300ms linear;
+	}
+
+	.hero-drift {
+		animation: none;
+	}
+
+	*,
+	*::before,
+	*::after {
+		transition-duration: 1ms !important;
+	}
+}
