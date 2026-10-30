@@ -1,10 +1,13 @@
 import type { NextConfig } from "next";
 
+const isProd = process.env.NEXT_PUBLIC_NODE_ENV === "production";
+
 const nextConfig: NextConfig = {
   trailingSlash: true,
   output: "export",
-  basePath: "/profolio_namnh",
+  basePath: isProd ? "/profolio_namnh" : "",
   images: {
+    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "picsum.photos" },
       { protocol: "https", hostname: "fastly.picsum.photos" },
